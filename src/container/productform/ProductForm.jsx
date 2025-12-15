@@ -41,7 +41,6 @@ function ProductForm(props) {
         },
     });
 
-
     const { handleSubmit, handleChange, values, errors, touched, handleBlur } = formikobj;
     console.log(errors, touched);
 

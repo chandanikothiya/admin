@@ -5,8 +5,8 @@ import ProductForm from './container/productform/ProductForm';
 function App(props) {
   return (
     <div>
-      {/* <User/> */}
-      <ProductForm/>
+      <User/>
+      {/* <ProductForm/> */}
     </div>
   );
 }

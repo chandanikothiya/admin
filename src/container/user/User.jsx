@@ -140,7 +140,12 @@ function User(props) {
     //disstructring
     const { handleSubmit, handleChange, values, errors, touched, handleBlur, setFieldValue } = formikobj;
     console.log(errors, touched);
-    //touched is give true if any filed touch mena sappde koui field ne touch kari hoi tyare
+    //touched is give true if any filed touch mena appde koi field ne touch kari hoi tyare
+
+    function handlehchange(val) {
+        console.log(val,formikobj.initialValues.hobby);
+
+    }
 
     return (
         <div>
@@ -265,7 +270,9 @@ function User(props) {
                                 <FormLabel component="legend">Hobby</FormLabel>
                                 {
                                     hobby.map((v) => (
-                                        <FormControlLabel control={<Checkbox />} label={v.label} />
+                                        <FormControlLabel control={<Checkbox />} label={v.label} 
+                                            onChange={() => handlehchange(v.value)}
+                                        />
                                     ))
                                 }
                                

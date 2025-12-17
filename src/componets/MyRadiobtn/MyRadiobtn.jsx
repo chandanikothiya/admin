@@ -6,15 +6,14 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { useField } from 'formik';
 
-function MyRadiobtn({data = [],...props}) {
+function MyRadiobtn({data,label,...props}) {
 
     const [field, meta] = useField(props);
     console.log(props);
 
     return (
-        <>
             <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+                <FormLabel id="demo-radio-buttons-group-label">{label}</FormLabel>
                 <RadioGroup
                     {...field}
                     aria-labelledby="demo-radio-buttons-group-label"
@@ -32,8 +31,6 @@ function MyRadiobtn({data = [],...props}) {
                     meta.error && meta.touched ? <p style={{color:'red'}}>{meta.error}</p> : ""
                 }
             </FormControl>
-
-        </>
     );
 }
 

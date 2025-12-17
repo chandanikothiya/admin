@@ -14,9 +14,6 @@ import MyRadiobtn from '../../componets/MyRadiobtn/MyRadiobtn';
 import MyCheckbox from '../../componets/MyCheckbox/MyCheckbox';
 
 
-
-
-
 function UserForm(props) {
 
     const [open, setOpen] = React.useState(false);
@@ -102,7 +99,7 @@ function UserForm(props) {
             .max(yesterdayDate, "Pls Select Past Date"),
         country: string().required(),
         profile_img: mixed()
-            .required('Pls selct image')
+            .required('Pls select image')
             .test('profile_img', 'only png,jpg and jpeg allowed', function (val) {
                 console.log(val, val.type);
 
@@ -211,6 +208,7 @@ function UserForm(props) {
                                 <MyRadiobtn
                                     name="gender"
                                     data={gender}
+                                    label="gender"
                                 />
 
                                 <MyCheckbox

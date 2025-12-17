@@ -6,10 +6,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { date, mixed, object, string } from 'yup';
+import { array, date, mixed, object, string } from 'yup';
 import { Form, Formik, useFormik } from 'formik';
 import MyTextField from '../../componets/MyTextField/MyTextField';
 import UploadFile from '../../componets/UploadFile/UploadFile';
+import MyRadiobtn from '../../componets/MyRadiobtn/MyRadiobtn';
+import MyCheckbox from '../../componets/MyCheckbox/MyCheckbox';
 
 
 
@@ -51,9 +53,20 @@ function UserForm(props) {
         { value: 'uk', label: 'UK' },
         { value: 'usa', label: 'USA' }
     ]
-    console.log(country);
-    country.map((v) => console.log(v.label)
-    )
+
+    const gender = [
+        { value: 'female', label: 'Female' },
+        { value: 'male', label: 'Male' },
+        { value: 'other', label: 'Other' },
+    ]
+
+    const hobby = [
+        { value: 'reading', label: 'Reading' },
+        { value: 'singing', label: 'Singing' },
+        { value: 'cricket', label: 'Cricket' },
+        { value: 'traveling', label: 'Traveling' },
+        { value: 'walking', label: 'Walking' }
+    ]
 
 
     let userSchema = object({
@@ -82,6 +95,8 @@ function UserForm(props) {
                 console.log(val, val.split(" ").length);
                 return val.split(" ").length <= 3
             }),
+        gender: string().required('Pls Select Gender'),
+        hobby: array().min(2),
         jd: date()
             .required("Pls Select Date")
             .max(yesterdayDate, "Pls Select Past Date"),
@@ -141,7 +156,9 @@ function UserForm(props) {
                                 cpassword: '',
                                 address: '',
                                 jd: '',
-                                country:'',
+                                country: '',
+                                gender: '',
+                                hobby: [],
                                 profile_img: ''
                             }}
                             validationSchema={userSchema}
@@ -190,6 +207,17 @@ function UserForm(props) {
                                     label="Joining Date"
                                     InputLabelProps={{ shrink: true, required: true }}
                                     type="date" />
+
+                                <MyRadiobtn
+                                    name="gender"
+                                    data={gender}
+                                />
+
+                                <MyCheckbox
+                                    name="hobby"
+                                    label="Hobby"
+                                    data={hobby}
+                                />
 
                                 <MyTextField
                                     id="country"

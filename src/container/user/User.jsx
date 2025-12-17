@@ -6,10 +6,17 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { date, mixed, object, string } from 'yup';
-import { useFormik } from 'formik';
+import { array, date, mixed, object, string } from 'yup';
+import { FieldArray, useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import FormGroup from '@mui/material/FormGroup';
+import Checkbox from '@mui/material/Checkbox';
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -55,6 +62,14 @@ function User(props) {
 
     console.log(yesterdayDate);
 
+    const hobby = [
+        { value: 'reading', label: 'Reading' },
+        { value: 'singing', label: 'Singing' },
+        { value: 'cricket', label: 'Cricket' },
+        { value: 'traveling', label: 'Traveling' },
+        { value: 'walking', label: 'Walking' }
+    ]
+
 
     let userSchema = object({
         name: string()
@@ -85,6 +100,8 @@ function User(props) {
         jd: date()
             .required("Pls Select Date")
             .max(yesterdayDate, "Pls Select Past Date"),
+        gender: string().required(),
+        hobby:array().min(2),
         profile_img: mixed()
             .required('Pls selct image')
             .test('profile_img', 'only png,jpg and jpeg allowed', function (val) {
@@ -110,6 +127,8 @@ function User(props) {
             cpassword: '',
             address: '',
             jd: '',
+            gender: '',
+            hobby:[],
             profile_img: ''
         },
         validationSchema: userSchema,
@@ -227,6 +246,34 @@ function User(props) {
                                 helperText={errors.jd && touched.jd ? errors.jd : ""}
                             />
 
+                            <FormControl name="gender">
+                                <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+                                <RadioGroup
+                                    aria-labelledby="demo-radio-buttons-group-label"
+                                    
+                                >
+                                    <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                    <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                    <FormControlLabel value="other" control={<Radio />} label="Other" />
+                                </RadioGroup>
+                                {
+                                    errors.gender && touched.gender ? <p style={{ color: 'red' }}>{errors.gender}</p> : ""
+                                }
+                            </FormControl>
+
+                            <FormGroup name="hobby">
+                                <FormLabel component="legend">Hobby</FormLabel>
+                                {
+                                    hobby.map((v) => (
+                                        <FormControlLabel control={<Checkbox />} label={v.label} />
+                                    ))
+                                }
+                               
+                                  {
+                                    errors.hobby && touched.hobby ? <p style={{ color: 'red' }}>{errors.hobby}</p> : ""
+                                }
+                            </FormGroup>
+
                             <Button
                                 component="label"
                                 role={undefined}
@@ -244,7 +291,7 @@ function User(props) {
                                 />
                             </Button>
 
-                            {errors.profile_img && touched.profile_img ? <p className='ferror' style={{color: 'red'}}>{errors.profile_img}</p> : null}
+                            {errors.profile_img && touched.profile_img ? <p className='ferror' style={{ color: 'red' }}>{errors.profile_img}</p> : null}
 
                         </form>
                     </DialogContent>

@@ -6,12 +6,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { array, date, mixed, object, string } from 'yup';
+import { array, boolean, date, mixed, object, string } from 'yup';
 import { Form, Formik, useFormik } from 'formik';
 import MyTextField from '../../componets/MyTextField/MyTextField';
 import UploadFile from '../../componets/UploadFile/UploadFile';
 import MyRadiobtn from '../../componets/MyRadiobtn/MyRadiobtn';
 import MyCheckbox from '../../componets/MyCheckbox/MyCheckbox';
+import MySwitch from '../../componets/MySwitch/MySwitch';
 
 
 function UserForm(props) {
@@ -111,7 +112,8 @@ function UserForm(props) {
                 console.log(val, val.size);
 
                 return val.size <= 2 * 1024 * 1024
-            })
+            }),
+            togglebtn: boolean().required().oneOf([true],"toggle must be select")
     })
 
     //formik code
@@ -156,7 +158,8 @@ function UserForm(props) {
                                 country: '',
                                 gender: '',
                                 hobby: [],
-                                profile_img: ''
+                                profile_img: '',
+                                togglebtn:false
                             }}
                             validationSchema={userSchema}
                             onSubmit={(values) => {
@@ -227,6 +230,11 @@ function UserForm(props) {
 
                                 <UploadFile
                                     name='profile_img'
+                                />
+
+                                <MySwitch
+                                    label="Switch"
+                                    name="togglebtn"
                                 />
 
                             </Form>

@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { array, date, mixed, object, string } from 'yup';
+import { array, boolean, date, mixed, object, string } from 'yup';
 import { FieldArray, useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -17,6 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
+import Switch from '@mui/material/Switch';
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -33,6 +34,8 @@ const VisuallyHiddenInput = styled('input')({
 
 
 function User(props) {
+
+    const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
     const [open, setOpen] = React.useState(false);
 
@@ -101,7 +104,7 @@ function User(props) {
             .required("Pls Select Date")
             .max(yesterdayDate, "Pls Select Past Date"),
         gender: string().required(),
-        hobby:array().min(2),
+        hobby: array().min(2),
         profile_img: mixed()
             .required('Pls selct image')
             .test('profile_img', 'only png,jpg and jpeg allowed', function (val) {
@@ -115,7 +118,8 @@ function User(props) {
                 console.log(val, val.size);
 
                 return val.size <= 2 * 1024 * 1024
-            })
+            }),
+        togglebtn: boolean().required().oneOf([true],"toggle must be select")
     })
 
     //formik code
@@ -128,8 +132,9 @@ function User(props) {
             address: '',
             jd: '',
             gender: '',
-            hobby:[],
-            profile_img: ''
+            hobby: [],
+            profile_img: '',
+            togglebtn: false
         },
         validationSchema: userSchema,
         onSubmit: values => {
@@ -139,12 +144,20 @@ function User(props) {
 
     //disstructring
     const { handleSubmit, handleChange, values, errors, touched, handleBlur, setFieldValue } = formikobj;
-    console.log(errors, touched);
+    console.log(errors, touched, values);
     //touched is give true if any filed touch mena appde koi field ne touch kari hoi tyare
 
-    function handlehchange(val) {
-        console.log(val,formikobj.initialValues.hobby);
+    console.log(values.hobby);
 
+    function handlehchange(val) {
+        console.log(values.hobby, formikobj.initialValues.hobby);
+
+        if (values.hobby.includes(val)) {
+            const x = values.hobby.filter((v) => v !== val)
+            setFieldValue("hobby", x)
+        } else {
+            setFieldValue("hobby", [...values.hobby, val]);
+        }
     }
 
     return (
@@ -255,7 +268,7 @@ function User(props) {
                                 <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
                                 <RadioGroup
                                     aria-labelledby="demo-radio-buttons-group-label"
-                                    
+
                                 >
                                     <FormControlLabel value="female" control={<Radio />} label="Female" />
                                     <FormControlLabel value="male" control={<Radio />} label="Male" />
@@ -270,13 +283,13 @@ function User(props) {
                                 <FormLabel component="legend">Hobby</FormLabel>
                                 {
                                     hobby.map((v) => (
-                                        <FormControlLabel control={<Checkbox />} label={v.label} 
+                                        <FormControlLabel control={<Checkbox />} label={v.label}
                                             onChange={() => handlehchange(v.value)}
                                         />
                                     ))
                                 }
-                               
-                                  {
+
+                                {
                                     errors.hobby && touched.hobby ? <p style={{ color: 'red' }}>{errors.hobby}</p> : ""
                                 }
                             </FormGroup>
@@ -299,6 +312,13 @@ function User(props) {
                             </Button>
 
                             {errors.profile_img && touched.profile_img ? <p className='ferror' style={{ color: 'red' }}>{errors.profile_img}</p> : null}
+
+                            <Switch name="togglebtn"
+                                onChange={handleChange}
+                                {...label} 
+                                 />
+
+                            {errors.togglebtn && touched.togglebtn ? <p className='ferror' style={{ color: 'red' }}>{errors.togglebtn}</p> : null}
 
                         </form>
                     </DialogContent>

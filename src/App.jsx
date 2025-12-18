@@ -6,8 +6,8 @@ import UserForm from './container/user/UserForm';
 function App(props) {
   return (
     <div>
-      <User/>
-      {/* <UserForm/> */}
+      {/* <User/> */}
+      <UserForm/>
       
       {/* <ProductForm/> */}
     </div>

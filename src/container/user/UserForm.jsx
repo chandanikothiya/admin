@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -13,11 +13,23 @@ import UploadFile from '../../componets/UploadFile/UploadFile';
 import MyRadiobtn from '../../componets/MyRadiobtn/MyRadiobtn';
 import MyCheckbox from '../../componets/MyCheckbox/MyCheckbox';
 import MySwitch from '../../componets/MySwitch/MySwitch';
+import { DataGrid } from '@mui/x-data-grid';
+
 
 
 function UserForm(props) {
 
     const [open, setOpen] = React.useState(false);
+    const [data, setData] = useState([]);
+
+    const getdata = () => {
+        const localdata = JSON.parse(localStorage.getItem("user")) || [];
+        setData(localdata)
+    }
+
+    useEffect(() => {
+        getdata();
+    }, [])
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -69,8 +81,8 @@ function UserForm(props) {
 
     let userSchema = object({
         name: string()
-            .required('Please Enter Name')
-            .matches(/[a-zA-Z]+\\.?/, 'Pls enter proper name'),
+            .required('Please Enter Name'),
+        // .matches(/[a-zA-Z]+\\.?/, 'Pls enter proper name'),
         email: string()
             .email()
             .required('Please Enter Email'),
@@ -113,30 +125,32 @@ function UserForm(props) {
 
                 return val.size <= 2 * 1024 * 1024
             }),
-            togglebtn: boolean().required().oneOf([true],"toggle must be select")
+        status: boolean().required().oneOf([true], "Status must be active")
     })
 
-    //formik code
-    const formikobj = useFormik({
-        initialValues: {
-            name: '',
-            email: '',
-            password: '',
-            cpassword: '',
-            address: '',
-            jd: '',
-            profile_img: ''
-        },
-        validationSchema: userSchema,
-        onSubmit: values => {
-            console.log(values);
-        },
-    });
+    function handlesubmit(values) {
+        console.log("ok", values.profile_img.name);
+        const localdata = JSON.parse(localStorage.getItem("user")) || [];
 
-    //disstructring
-    const { handleSubmit, handleChange, values, errors, touched, handleBlur, setFieldValue } = formikobj;
-    console.log(errors, touched);
-    //touched is give true if any filed touch mena sappde koui field ne touch kari hoi tyare
+        localdata.push({ ...values, profile_img: values.profile_img.name, id: crypto.randomUUID() });
+        // console.log(localdata);
+
+        localStorage.setItem("user", JSON.stringify(localdata))
+    }
+
+    const columns = [
+        { field: 'name', headerName: 'Name', width: 130 },
+        { field: 'email', headerName: 'Email', width: 130 },
+        { field: 'gender', headerName: 'Gender', width: 130 },
+        { field: 'address', headerName: 'Address', width: 130 },
+        { field: 'hobby', headerName: 'Hobby', width: 130 },
+        { field: 'jd', headerName: 'Joining Date', width: 130 },
+        { field: 'profile_img', headerName: 'Profile_img', width: 200 },
+        { field: 'status', headerName: 'Status', width: 130 },
+
+    ];
+
+    const paginationModel = { page: 0, pageSize: 5 };
 
     return (
         <div>
@@ -159,14 +173,15 @@ function UserForm(props) {
                                 gender: '',
                                 hobby: [],
                                 profile_img: '',
-                                togglebtn:false
+                                status: false
                             }}
                             validationSchema={userSchema}
                             onSubmit={(values) => {
-                                console.log(values);
+                                console.log("jjj", values);
+                                handlesubmit(values);
                             }}
                         >
-                            <Form id="subscription-form">
+                            <Form>
                                 <MyTextField
                                     id="name"
                                     name="name"
@@ -224,8 +239,14 @@ function UserForm(props) {
                                     id="country"
                                     name="country"
                                     label="Country"
+                                    InputLabelProps={{ shrink: true, required: true }}
                                     select
                                     data={country}
+                                    slotProps={{
+                                        select: {
+                                            native: true,
+                                        },
+                                    }}
                                 />
 
                                 <UploadFile
@@ -233,23 +254,34 @@ function UserForm(props) {
                                 />
 
                                 <MySwitch
-                                    label="Switch"
-                                    name="togglebtn"
+                                    label="Status"
+                                    name="status"
+                                    display="Active / Inactive"
                                 />
+
+                                <DialogActions>
+                                    <Button onClick={handleClose}>Cancel</Button>
+                                    <Button type="submit" >
+                                        Submit
+                                    </Button>
+                                </DialogActions>
 
                             </Form>
                         </Formik>
                     </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button type="submit" form="subscription-form">
-                            Submit
-                        </Button>
-                    </DialogActions>
+
 
                 </Dialog>
             </React.Fragment>
 
+            <DataGrid
+                rows={data}
+                columns={columns}
+                initialState={{ pagination: { paginationModel } }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
+                sx={{ border: 0 }}
+            />
         </div >
     );
 }

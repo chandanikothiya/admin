@@ -12,7 +12,7 @@ function MyRadiobtn({data,label,...props}) {
     console.log(props);
 
     return (
-            <FormControl>
+            <FormControl  error={meta.error && meta.touched }>
                 <FormLabel id="demo-radio-buttons-group-label">{label}</FormLabel>
                 <RadioGroup
                     {...field}

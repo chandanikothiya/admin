@@ -12,8 +12,8 @@ import { useField } from 'formik';
 function MyTextField({ type = "text", data = [], ...props }) {
 
     const [field, meta] = useField(props);
-    console.log("Field", field);
-    console.log("meta", meta);
+    console.log("Fieldqqq", field);
+    console.log("metaqqq", meta);
     console.log(props);
     console.log(data);
     

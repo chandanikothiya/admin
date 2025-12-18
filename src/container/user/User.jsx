@@ -147,10 +147,10 @@ function User(props) {
     console.log(errors, touched, values);
     //touched is give true if any filed touch mena appde koi field ne touch kari hoi tyare
 
-    console.log(values.hobby);
+    // console.log(values.hobby);
 
     function handlehchange(val) {
-        console.log(values.hobby, formikobj.initialValues.hobby);
+        console.log(formikobj.initialValues.hobby,values.hobby);
 
         if (values.hobby.includes(val)) {
             const x = values.hobby.filter((v) => v !== val)

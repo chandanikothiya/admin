@@ -137,19 +137,23 @@ function UserForm(props) {
         // console.log(localdata);
 
         localStorage.setItem("user", JSON.stringify(localdata))
+        
+        //this line for rerender (refreseh paeg in react when any props or state value change then page rerennder(refesh))
+        setData(localdata)
     }
 
     const columns = [
         { field: 'name', headerName: 'Name', width: 130 },
-        { field: 'email', headerName: 'Email', width: 130 },
+        { field: 'email', headerName: 'Email', width: 180 },
         { field: 'gender', headerName: 'Gender', width: 130 },
         { field: 'address', headerName: 'Address', width: 130 },
         { field: 'hobby', headerName: 'Hobby', width: 130 },
         { field: 'jd', headerName: 'Joining Date', width: 130 },
         { field: 'profile_img', headerName: 'Profile_img', width: 200 },
-        { field: 'status', headerName: 'Status', width: 130 },
+        { field: 'status', headerName: 'Status', width: 100 },
         {
             field: 'action', headerName: 'Status', width: 130, renderCell: (params) => {
+                console.log(params)
                 return (
                     <>
                         <IconButton aria-label="delete"
@@ -160,17 +164,11 @@ function UserForm(props) {
                         </IconButton>
                         <IconButton aria-label="delete"
                             onClick={(e) => handleDelete(e, params.row)}
-                            color="primary"
+                            color="error"
                         >
                             <DeleteIcon />
                         </IconButton>
                     </>
-                    // <Button
-                    //     onClick={(e) => onButtonClick(e, params.row)}
-                    //     variant="contained"
-                    //   >
-                    //     <EditIcon/>
-                    //   </Button>
                 );
             }
         }
@@ -202,9 +200,13 @@ function UserForm(props) {
                                 status: false
                             }}
                             validationSchema={userSchema}
-                            onSubmit={(values) => {
+                            onSubmit={(values,{resetForm}) => {
                                 console.log("jjj", values);
+
                                 handlesubmit(values);
+
+                                handleClose();
+                                resetForm();
                             }}
                         >
                             <Form>

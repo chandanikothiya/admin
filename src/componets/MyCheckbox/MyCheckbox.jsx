@@ -27,33 +27,35 @@ function MyCheckbox({ data, label, ...props }) {
         }
     }
 
-
     return (
-        <FormControl
-            required
-            error={meta.error && meta.touched }
-            component="fieldset"
-            sx={{ m: 3 }}
-            variant="standard"
-        >
-            <FormLabel component="legend">{label}</FormLabel>
-            <FormGroup>
+        <>
+            <FormControl
+                style={{ display: 'block',margin:'0',marginTop:'20px' }}
+                required
+                error={meta.error && meta.touched}
+                component="fieldset"
+                sx={{ m: 3 }}
+                variant="standard"
+            >
+                <FormLabel component="legend">{label}</FormLabel>
+                <FormGroup>
+                    {
+                        data.map((v) => (
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={field.value.includes(v.value)} onChange={() => handleChange(v.value)} />
+                                }
+                                label={v.label}
+                            />
+                        ))
+                    }
+                </FormGroup>
                 {
-                    data.map((v) => (
-                        <FormControlLabel
-                            control={
-                                <Checkbox checked={field.value.includes(v.value)} onChange={() => handleChange(v.value)} />
-                            }
-                            label={v.label}
-                        />
-                    ))
+                    meta.error && meta.touched ? <FormHelperText style={{ color: 'red' }}>{meta.error}</FormHelperText> : ""
                 }
-            </FormGroup>
-            {
-                meta.error && meta.touched ?<FormHelperText style={{ color: 'red' }}>{meta.error}</FormHelperText> : ""
-            }
-            
-        </FormControl>
+
+            </FormControl>
+        </>
     );
 }
 

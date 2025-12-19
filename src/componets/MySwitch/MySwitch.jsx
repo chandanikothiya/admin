@@ -12,9 +12,9 @@ function MySwitch({ label, display, ...props }) {
     const [field, meta] = useField(props);
     console.log(field,meta);
 
-    return (
+    return ( 
         <>
-            <FormControl  error={meta.error && meta.touched } 
+            <FormControl  style={{display:'block',marginTop:'20px'}} error={meta.error && meta.touched } 
             component="fieldset" variant="standard">
                 <FormLabel component="legend">{label}</FormLabel>
                 <FormGroup>

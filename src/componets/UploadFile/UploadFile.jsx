@@ -20,7 +20,7 @@ function UploadFile(props) {
 
     const [field, meta, helpers] = useField(props);
     const { setValue } = helpers; // Formik's internal state management, specifically the values object.
-    console.log(helpers);
+    console.log(helpers,field);
 
 
     return (
@@ -41,6 +41,8 @@ function UploadFile(props) {
                 // onChange={(event) => console.log(event.target.files[0])}
                 />
             </Button>
+
+            <img src={"../public/images/" + field.value} alt="Profile-img" width={"50px"} height={"50px"}/>
 
             {meta.error && meta.touched ?
                 <p style={{ color: 'red' }}>{meta.error}</p> : ""}

@@ -43,7 +43,7 @@ function MyCheckbox({ data, label, ...props }) {
                         data.map((v) => (
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={field.value.includes(v.value)} onChange={() => handleChange(v.value)} />
+                                    <Checkbox checked={field.value?.includes(v.value)} onChange={() => handleChange(v.value)} />
                                 }
                                 label={v.label}
                             />

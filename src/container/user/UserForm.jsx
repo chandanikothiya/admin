@@ -17,11 +17,13 @@ import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Switch } from '@mui/material';
 
 function UserForm(props) {
 
     const [open, setOpen] = React.useState(false);
     const [data, setData] = useState([]);
+    const [updatedata,setUpdateData] = useState({});
 
     const getdata = () => {
         const localdata = JSON.parse(localStorage.getItem("user")) || [];
@@ -137,9 +139,26 @@ function UserForm(props) {
         // console.log(localdata);
 
         localStorage.setItem("user", JSON.stringify(localdata))
-        
+
         //this line for rerender (refreseh paeg in react when any props or state value change then page rerennder(refesh))
         setData(localdata)
+    }
+
+
+    function handleDelete(id) {
+        console.log(id,data);
+        
+        const fdata = data.filter((v) => v.id !== id);
+        
+        localStorage.setItem("user",JSON.stringify(fdata));
+        setData(fdata)
+    }
+
+    function handleEdit(data) {
+        console.log(data);
+        
+        handleClickOpen();
+        setUpdateData(data);
     }
 
     const columns = [
@@ -149,21 +168,32 @@ function UserForm(props) {
         { field: 'address', headerName: 'Address', width: 130 },
         { field: 'hobby', headerName: 'Hobby', width: 130 },
         { field: 'jd', headerName: 'Joining Date', width: 130 },
-        { field: 'profile_img', headerName: 'Profile_img', width: 200 },
-        { field: 'status', headerName: 'Status', width: 100 },
+        { 
+            field: 'profile_img', headerName: 'Profile_img', width: 130 ,
+            renderCell: (params) => (
+                <img src={"../public/images/" + params.row.profile_img} alt="Profile-img" width={"50px"} height={"50px"}/>
+            )
+        
+        },
+        {
+             field: 'status', headerName: 'Status', width: 100,
+              renderCell: (params) => (
+                <Switch checked={params.row.status}/>
+            ) 
+            },
         {
             field: 'action', headerName: 'Status', width: 130, renderCell: (params) => {
                 console.log(params)
                 return (
                     <>
                         <IconButton aria-label="delete"
-                            onClick={(e) => handleEdit(e, params.row)}
+                            onClick={(e) => handleEdit(params.row)}
                             color="primary"
                         >
                             <EditIcon />
                         </IconButton>
                         <IconButton aria-label="delete"
-                            onClick={(e) => handleDelete(e, params.row)}
+                            onClick={(e) => handleDelete(params.row.id)}
                             color="error"
                         >
                             <DeleteIcon />
@@ -186,7 +216,7 @@ function UserForm(props) {
                     <DialogTitle>Subscribe</DialogTitle>
                     <DialogContent>
                         <Formik
-                            initialValues={{
+                            initialValues={updatedata ? updatedata :{
                                 name: '',
                                 email: '',
                                 password: '',

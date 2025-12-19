@@ -14,8 +14,9 @@ import MyRadiobtn from '../../componets/MyRadiobtn/MyRadiobtn';
 import MyCheckbox from '../../componets/MyCheckbox/MyCheckbox';
 import MySwitch from '../../componets/MySwitch/MySwitch';
 import { DataGrid } from '@mui/x-data-grid';
-
-
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function UserForm(props) {
 
@@ -147,7 +148,32 @@ function UserForm(props) {
         { field: 'jd', headerName: 'Joining Date', width: 130 },
         { field: 'profile_img', headerName: 'Profile_img', width: 200 },
         { field: 'status', headerName: 'Status', width: 130 },
-
+        {
+            field: 'action', headerName: 'Status', width: 130, renderCell: (params) => {
+                return (
+                    <>
+                        <IconButton aria-label="delete"
+                            onClick={(e) => handleEdit(e, params.row)}
+                            color="primary"
+                        >
+                            <EditIcon />
+                        </IconButton>
+                        <IconButton aria-label="delete"
+                            onClick={(e) => handleDelete(e, params.row)}
+                            color="primary"
+                        >
+                            <DeleteIcon />
+                        </IconButton>
+                    </>
+                    // <Button
+                    //     onClick={(e) => onButtonClick(e, params.row)}
+                    //     variant="contained"
+                    //   >
+                    //     <EditIcon/>
+                    //   </Button>
+                );
+            }
+        }
     ];
 
     const paginationModel = { page: 0, pageSize: 5 };

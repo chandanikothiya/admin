@@ -23,7 +23,7 @@ function UserForm(props) {
 
     const [open, setOpen] = React.useState(false);
     const [data, setData] = useState([]);
-    const [updatedata,setUpdateData] = useState({});
+    const [updatedata, setUpdateData] = useState({});
 
     const getdata = () => {
         const localdata = JSON.parse(localStorage.getItem("user")) || [];
@@ -117,16 +117,22 @@ function UserForm(props) {
         profile_img: mixed()
             .required('Pls select image')
             .test('profile_img', 'only png,jpg and jpeg allowed', function (val) {
-                console.log(val, val.type);
+                console.log(val, val?.type);
+                if (typeof val === 'string') {
+                    return true
+                }
 
                 const typeArray = ['image/png', 'image/jpg', 'image/jpeg'];
 
-                return typeArray.includes(val.type)
+                return typeArray.includes(val?.type)
             })
             .test('profile_img', 'only 2mb size file allowed', function (val) {
-                console.log(val, val.size);
+                console.log(val, val?.size);
+                if (typeof val === 'string') {
+                    return true
+                }
 
-                return val.size <= 2 * 1024 * 1024
+                return val?.size <= 2 * 1024 * 1024
             }),
         status: boolean().required().oneOf([true], "Status must be active")
     })
@@ -135,10 +141,13 @@ function UserForm(props) {
         console.log("ok", values.profile_img.name);
         const localdata = JSON.parse(localStorage.getItem("user")) || [];
 
-        localdata.push({ ...values, profile_img: values.profile_img.name, id: crypto.randomUUID() });
-        // console.log(localdata);
+            
+       
+            localdata.push({ ...values, profile_img: values.profile_img.name, id: crypto.randomUUID() });
+            // console.log(localdata);
 
-        localStorage.setItem("user", JSON.stringify(localdata))
+            localStorage.setItem("user", JSON.stringify(localdata))
+        
 
         //this line for rerender (refreseh paeg in react when any props or state value change then page rerennder(refesh))
         setData(localdata)
@@ -146,20 +155,22 @@ function UserForm(props) {
 
 
     function handleDelete(id) {
-        console.log(id,data);
-        
+        console.log(id, data);
+
         const fdata = data.filter((v) => v.id !== id);
-        
-        localStorage.setItem("user",JSON.stringify(fdata));
+
+        localStorage.setItem("user", JSON.stringify(fdata));
         setData(fdata)
     }
 
     function handleEdit(data) {
         console.log(data);
-        
+
         handleClickOpen();
         setUpdateData(data);
     }
+    console.log(updatedata);
+    
 
     const columns = [
         { field: 'name', headerName: 'Name', width: 130 },
@@ -168,19 +179,19 @@ function UserForm(props) {
         { field: 'address', headerName: 'Address', width: 130 },
         { field: 'hobby', headerName: 'Hobby', width: 130 },
         { field: 'jd', headerName: 'Joining Date', width: 130 },
-        { 
-            field: 'profile_img', headerName: 'Profile_img', width: 130 ,
+        {
+            field: 'profile_img', headerName: 'Profile_img', width: 130,
             renderCell: (params) => (
-                <img src={"../public/images/" + params.row.profile_img} alt="Profile-img" width={"50px"} height={"50px"}/>
+                <img src={"../public/images/" + params.row.profile_img} alt="Profile-img" width={"50px"} height={"50px"} />
             )
-        
+
         },
         {
-             field: 'status', headerName: 'Status', width: 100,
-              renderCell: (params) => (
-                <Switch checked={params.row.status}/>
-            ) 
-            },
+            field: 'status', headerName: 'Status', width: 100,
+            renderCell: (params) => (
+                <Switch checked={params.row.status} />
+            )
+        },
         {
             field: 'action', headerName: 'Status', width: 130, renderCell: (params) => {
                 console.log(params)
@@ -203,7 +214,6 @@ function UserForm(props) {
             }
         }
     ];
-
     const paginationModel = { page: 0, pageSize: 5 };
 
     return (
@@ -216,7 +226,7 @@ function UserForm(props) {
                     <DialogTitle>Subscribe</DialogTitle>
                     <DialogContent>
                         <Formik
-                            initialValues={updatedata ? updatedata :{
+                            initialValues={Object.keys(updatedata).length > 0 ? updatedata : {
                                 name: '',
                                 email: '',
                                 password: '',
@@ -230,7 +240,7 @@ function UserForm(props) {
                                 status: false
                             }}
                             validationSchema={userSchema}
-                            onSubmit={(values,{resetForm}) => {
+                            onSubmit={(values, { resetForm }) => {
                                 console.log("jjj", values);
 
                                 handlesubmit(values);

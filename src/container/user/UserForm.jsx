@@ -138,20 +138,35 @@ function UserForm(props) {
     })
 
     function handlesubmit(values) {
-        console.log("ok", values.profile_img.name);
-        const localdata = JSON.parse(localStorage.getItem("user")) || [];
+        // console.log("ok", "hello", values.profile_img.name, updatedata);
 
+        if (Object.keys(updatedata).length > 0) {
+            const localdata = JSON.parse(localStorage.getItem("user")) || [];
+
+            const findex = localdata.findIndex((v) => v.id === updatedata.id)
+            console.log("fdata",findex,values);
+
+            localdata[findex] = ({ ...values, profile_img: values.profile_img.name});
+            console.log("fdata",localdata);
             
-       
+            localStorage.setItem("user",JSON.stringify(localdata));
+            setData(localdata)
+        } else {
+            const localdata = JSON.parse(localStorage.getItem("user")) || [];
+
             localdata.push({ ...values, profile_img: values.profile_img.name, id: crypto.randomUUID() });
             // console.log(localdata);
 
             localStorage.setItem("user", JSON.stringify(localdata))
-        
 
-        //this line for rerender (refreseh paeg in react when any props or state value change then page rerennder(refesh))
-        setData(localdata)
+            //this line for rerender (refreseh paeg in react when any props or state value change then page rerennder(refesh))
+            setData(localdata)
+        }
     }
+
+    // let arr1 = [10,20,30,40];
+    // console.log(arr1.findIndex((v) => v==40));
+    // console.log(arr1.indexOf(40));
 
 
     function handleDelete(id) {
@@ -170,17 +185,17 @@ function UserForm(props) {
         setUpdateData(data);
     }
     console.log(updatedata);
-    
+
 
     const columns = [
         { field: 'name', headerName: 'Name', width: 130 },
         { field: 'email', headerName: 'Email', width: 180 },
         { field: 'gender', headerName: 'Gender', width: 130 },
         { field: 'address', headerName: 'Address', width: 130 },
-        { field: 'hobby', headerName: 'Hobby', width: 130 },
+        { field: 'hobby', headerName: 'Hobby', width: 200 },
         { field: 'jd', headerName: 'Joining Date', width: 130 },
         {
-            field: 'profile_img', headerName: 'Profile_img', width: 130,
+            field: 'profile_img', headerName: 'Profile_img', width: 100,
             renderCell: (params) => (
                 <img src={"../public/images/" + params.row.profile_img} alt="Profile-img" width={"50px"} height={"50px"} />
             )

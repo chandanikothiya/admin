@@ -22,13 +22,6 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
 
 h1 {
   font-size: 3.2em;
@@ -65,4 +58,23 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+#userform {
+  width: 500px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 40px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  padding: 20px 30px;
+}
+
+#sbtn {
+  width: 200px !important;
+  margin: 0 auto;
+  margin-top: '30px';
+  border: 0;
+}
+#userform p{
+  color: red;
 }

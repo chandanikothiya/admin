@@ -1,0 +1,24 @@
+{
+  "user": [
+    {
+      "id": "9980",
+      "username": "chandanidone",
+      "startdate": "2025-12-03",
+      "enddate": "2025-12-16",
+      "area": "residensal",
+      "gst": "",
+      "password": "chandani",
+      "terms": true
+    },
+    {
+      "id": "01e7",
+      "username": "richa patel",
+      "startdate": "2025-12-05",
+      "enddate": "2025-12-18",
+      "area": "company",
+      "gst": "06BZAHM6385P6Z2",
+      "password": "richa",
+      "terms": true
+    }
+  ]
+}

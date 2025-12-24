@@ -138,36 +138,46 @@ function UserForm(props) {
     })
 
     function handlesubmit(values) {
-        // console.log("ok", "hello", values.profile_img.name, updatedata);
+        console.log("ok", values.profile_img, updatedata);
+
+        const localdata = JSON.parse(localStorage.getItem("user")) || [];
 
         if (Object.keys(updatedata).length > 0) {
-            const localdata = JSON.parse(localStorage.getItem("user")) || [];
+            let udata = { ...values }
+
+            //edit na time parjyare juni image hoi tyare value.profile_img string male and jyare new image hoi tyare object male
+            if (typeof values.profile_img === 'object') {
+                udata = { ...values, profile_img: values.profile_img.name }
+            }
 
             const findex = localdata.findIndex((v) => v.id === updatedata.id)
-            console.log("fdata",findex,values);
+            // console.log("fdata", findex,values, values.profile_img.name);
 
-            localdata[findex] = ({ ...values, profile_img: values.profile_img.name});
-            console.log("fdata",localdata);
-            
-            localStorage.setItem("user",JSON.stringify(localdata));
-            setData(localdata)
+            localdata[findex] = udata;
+            // console.log("fdata", localdata);
+
         } else {
-            const localdata = JSON.parse(localStorage.getItem("user")) || [];
-
             localdata.push({ ...values, profile_img: values.profile_img.name, id: crypto.randomUUID() });
-            // console.log(localdata);
-
-            localStorage.setItem("user", JSON.stringify(localdata))
-
-            //this line for rerender (refreseh paeg in react when any props or state value change then page rerennder(refesh))
-            setData(localdata)
+            // console.log(localdata)
         }
+        localStorage.setItem("user", JSON.stringify(localdata));
+        setData(localdata);
     }
 
     // let arr1 = [10,20,30,40];
     // console.log(arr1.findIndex((v) => v==40));
     // console.log(arr1.indexOf(40));
 
+    // let obj = {
+    //     name: "ram",
+    //     age: 21,
+    //     email: "ram@gmail.com"
+    // }
+    // let obj1 = {}
+    // Object.assign(obj1, obj)
+
+    // let n = Object.create(obj1)
+    // console.log(Object.hasOwn(n,"name"))
 
     function handleDelete(id) {
         console.log(id, data);
@@ -184,8 +194,18 @@ function UserForm(props) {
         handleClickOpen();
         setUpdateData(data);
     }
-    console.log(updatedata);
 
+    function handleswitch(data) {
+        console.log("data",data);
+        
+        const localdata = JSON.parse(localStorage.getItem("user")) || [];
+        const findex = localdata.findIndex((v) => v.id === data.id)
+
+        localdata[findex] = {...data, status: !data.status}
+        localStorage.setItem("user", JSON.stringify(localdata));
+        
+        setData(localdata)
+    }
 
     const columns = [
         { field: 'name', headerName: 'Name', width: 130 },
@@ -204,7 +224,7 @@ function UserForm(props) {
         {
             field: 'status', headerName: 'Status', width: 100,
             renderCell: (params) => (
-                <Switch checked={params.row.status} />
+                <Switch checked={params.row.status} onChange={(e) => handleswitch(params.row)} />
             )
         },
         {

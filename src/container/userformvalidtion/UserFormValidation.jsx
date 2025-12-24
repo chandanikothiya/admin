@@ -6,6 +6,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { resume } from 'react-dom/server';
 
 
 function UserFormValidation(props) {
@@ -72,13 +73,13 @@ function UserFormValidation(props) {
         //     let wpassword = ['abcd', 'password', '1234']
         //     let flag = true;
 
-        //     wpassword.map((v) => {
-        //         if (val.includes(v)) {
-        //             flag = false;
-        //         }
-        //         console.log(flag)
-        //         return flag;
-        //     })
+        //     // wpassword.map((v) => {
+        //     //     if (val.includes(v)) {
+        //     //         flag = false;
+        //     //     }
+        //     //     console.log(flag)
+        //     //     return flag;
+        //     // })
         // }),
         terms: boolean().required().oneOf([true], "terms must be checked")
     })
@@ -86,41 +87,44 @@ function UserFormValidation(props) {
     const handlefSubmit = async (values) => {
         // e.preventDefault();
         console.log(values);
-        let response = '';
-
         try {
-            
+
             if (Object.keys(updatedata).length > 0) {
-                response = await fetch(`http://localhost:3000/user/${updatedata.id}`, {
+                const response = await fetch(`http://localhost:3000/user/${updatedata.id}`, {
                     method: "PUT",
                     body: JSON.stringify(values),
                     headers: {
                         "Content-Type": "application/json",
                     }
                 })
+                const datar = await response.json();
+                console.log("datar", datar);
+
+                const index = data.findIndex((v) => v.id === updatedata.id)
+                const udata = [...data];
+                udata[index] = { ...datar }
+
+                setData(udata)
             } else {
-                response = await fetch("http://localhost:3000/user", {
+                const response = await fetch("http://localhost:3000/user", {
                     method: "POST",
                     body: JSON.stringify(values),
                     headers: {
                         "Content-Type": "application/json",
                     }
                 })
+                const datar = await response.json();
+                console.log(datar);
+                setData([...data, datar]);
             }
-            const datar = await response.json();
-            console.log(datar);
-            setData({ ...data, datar })
-            resetForm();
-
         } catch (error) {
-
+            console.log(error)
         }
-
-
     }
+    console.log(data);
 
     const formikobj = useFormik({
-        initialValues: Object.keys(updatedata).length > 0 ? updatedata : {
+        initialValues: {
             username: '',
             startdate: '',
             enddate: '',
@@ -131,10 +135,10 @@ function UserFormValidation(props) {
         },
         enableReinitialize: true,
         validationSchema: formSchemaobj,
-        onSubmit: values => {
+        onSubmit: (values, { resetForm }) => {
             console.log(values);
             handlefSubmit(values)
-
+            resetForm();
         },
     });
 
@@ -144,8 +148,17 @@ function UserFormValidation(props) {
                 method: "DELETE",
             })
 
-            const datar = await response.json();
-            setData({ ...data, datar })
+            const index = data.findIndex((v) => v.id === id);
+            // console.log("index",index);
+
+            const udata = [...data];
+            udata.splice(index, 1);
+            setData(udata);
+
+            //filter use for delete
+            //   const f = data.filter((v) => v.id !== id)
+            // setData(f)
+
         } catch (error) {
             console.log(error)
         }
@@ -155,9 +168,10 @@ function UserFormValidation(props) {
     const handleEdit = async (data) => {
         console.log(data)
         setUpdateData(data);
+        setValues(data)
     }
 
-    const { handleSubmit, handleChange, values, errors, handleBlur, touched, resetForm } = formikobj;
+    const { handleSubmit, handleChange, values, errors, handleBlur, touched,setValues } = formikobj;
     console.log(errors, touched, values);
 
     const columns = [

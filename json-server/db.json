@@ -1,23 +1,33 @@
 {
   "user": [
     {
-      "id": "9980",
-      "username": "chandanidone",
+      "id": "7e71",
+      "username": "chandani",
       "startdate": "2025-12-03",
-      "enddate": "2025-12-16",
-      "area": "residensal",
-      "gst": "",
+      "enddate": "2025-12-17",
+      "area": "company",
+      "gst": "06BZAHM6385P6Z2",
       "password": "chandani",
       "terms": true
     },
     {
-      "id": "01e7",
-      "username": "richa patel",
-      "startdate": "2025-12-05",
-      "enddate": "2025-12-18",
-      "area": "company",
-      "gst": "06BZAHM6385P6Z2",
-      "password": "richa",
+      "id": "4307",
+      "username": "nishaok",
+      "startdate": "2025-12-04",
+      "enddate": "2025-12-11",
+      "area": "residensal",
+      "gst": "",
+      "password": "nisha",
+      "terms": true
+    },
+    {
+      "id": "5eda",
+      "username": "ritaok",
+      "startdate": "2025-12-04",
+      "enddate": "2025-12-19",
+      "area": "residensal",
+      "gst": "",
+      "password": "rita",
       "terms": true
     }
   ]

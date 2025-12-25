@@ -37,7 +37,7 @@ function MyCheckbox({ data, label, ...props }) {
                 sx={{ m: 3 }}
                 variant="standard"
             >
-                <FormLabel component="legend">{label}</FormLabel>
+                <FormLabel component="legend">{label?.label}</FormLabel>
                 <FormGroup>
                     {
                         data.map((v) => (

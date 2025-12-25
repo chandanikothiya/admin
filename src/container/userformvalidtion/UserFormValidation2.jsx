@@ -109,6 +109,7 @@ function UserFormValidation(props) {
                 udata[index] = { ...datar }
 
                 setData(udata)
+                setUpdateData({})
             } else {
                 const response = await fetch("http://localhost:3000/user", {
                     method: "POST",

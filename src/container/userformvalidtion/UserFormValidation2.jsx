@@ -273,7 +273,7 @@ function UserFormValidation(props) {
                             label="I accept Terms and Conditions"
                         />
                         {touched.terms && errors.terms && (
-                            <FormHelperText style={{ color: 'red' }}>{errors.terms}</FormHelperText>
+                            <p style={{ color: 'red' }}>{errors.terms}</p>
                         )}
 
                         <button type="submit" id="sbtn" style={{ backgroundColor: 'green', color: 'white', display: 'block', marginTop: '30px' }}>
